@@ -1,8 +1,8 @@
 #!/bin/sh
 
-SDCARD=mmcblk0
+SDCARD=mmcblk1
 SDCARD_PATH=/dev/${SDCARD}
-TIMEOUT=60
+TIMEOUT=10
 MOUNTPOINT=/tmp/sdcard
 
 echo Start testing SDCARD:${SDCARD}
@@ -15,23 +15,15 @@ for i in `seq ${TIMEOUT}`;do
 	echo SDCARD inserted...
 
 	capacity=`cat /proc/partitions | grep ${SDCARD} -w | busybox awk '{printf $3}'`
+
 	echo "${SDCARD}: ${capacity}"
-	echo ${capacity} > /run/sd_capacity
 
-	busybox mount | grep ${SDCARD_PATH} && exit 0
-
-	mkdir -p ${MOUNTPOINT} 2>/dev/null
-
-	for p in `ls ${SDCARD_PATH}*`;do
-		echo Mounting ${p}...
-		busybox mount ${p} ${MOUNTPOINT} || continue
-
-		echo Mounted ${p}...
-		busybox umount ${MOUNTPOINT}
+	if [ $capacity -gt 0 ] 
+	then
+		echo "sdcard capacity > 0,OK"
 		exit 0
-	done
-
-	echo Failed to mount SDCARD:${SDCARD}...
+	fi
+	
 	exit 1
 done
 

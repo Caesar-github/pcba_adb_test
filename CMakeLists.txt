@@ -12,6 +12,8 @@ set(SRC_LIST
     FactoryTest-wlan.cpp
     FactoryTest-usbhost.cpp
     FactoryTest-sdcard.cpp
+    FactoryTest-lan.cpp
+    FactoryTest-ircut.cpp
     # NewTest.cpp
 )
 foreach(obj_source ${SRC_LIST})

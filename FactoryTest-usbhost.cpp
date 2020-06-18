@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <linux/input.h>
 #include <signal.h>
+#include <unistd.h>
 #include "common.h"
 
 int UsbHostAutoTest()
@@ -60,8 +61,7 @@ int main(int argc, char *argv[])
 {
     int retValue = 0, tmpRes = 0;
 
-    FILE *fp = fopen(FACTORYMODE, "r");
-    if(fp == NULL)
+    if(access(FACTORYMODE, F_OK) == -1)
     {
         FormatPrint("Not in factory test mode \n");
         retValue = 1;

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USBHOST=sda1
+USBHOST=sda
 USBHOST_PATH=/dev/${USBHOST}
 TIMEOUT=10
 MOUNTPOINT=/tmp/usb_storage
@@ -15,23 +15,15 @@ for i in `seq ${TIMEOUT}`;do
 	echo USBHOST inserted...
 
 	capacity=`cat /proc/partitions | grep ${USBHOST} -w | busybox awk '{printf $3}'`
+
 	echo "${USBHOST}: ${capacity}"
-	echo ${capacity} > /run/usbhost_capacity
 
-	busybox mount | grep ${USBHOST_PATH} && exit 0
-
-	mkdir -p ${MOUNTPOINT} 2>/dev/null
-
-	for p in `ls ${USBHOST_PATH}*`;do
-		echo Mounting ${p}...
-		busybox mount ${p} ${MOUNTPOINT} || continue
-
-		echo Mounted ${p}...
-		busybox umount ${MOUNTPOINT}
+	if [ $capacity -gt 0 ] 
+	then
+		echo "usb capacity > 0,OK"
 		exit 0
-	done
-
-	echo Failed to mount USBHOST:${USBHOST}...
+	fi
+	
 	exit 1
 done
 

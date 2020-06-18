@@ -6,37 +6,37 @@
 #include <fcntl.h>
 #include "common.h"
 
-int WLanTest()
+int LanTest()
 {
     int retValue = 0;
 
     int net_fd;
-    net_fd = open("/sys/class/net/wlan0/operstate", O_RDONLY);
+    net_fd = open("/sys/class/net/eth0/operstate", O_RDONLY);
     if(net_fd < 0)
     {
-        FormatPrint("open wlan0 err\n");
+        FormatPrint("open eth0 err\n");
         retValue = 1;
         return retValue;
     }
-    FormatPrint("open wlan0 success\n");
+    FormatPrint("open eth0 success\n");
 
     char status[20];
     memset(status, 0, sizeof(status));
     int ret = read(net_fd, status, 10);
-    FormatPrint("wlan0 status is %s", status);
+    FormatPrint("eth0 status is %s", status);
     if(NULL != strstr(status, "up"))
     {
-        FormatPrint("wlan0 online\n");
+        FormatPrint("eth0 online\n");
         retValue = 0;
     }
     else if(NULL != strstr(status, "down"))
     {
-        FormatPrint("wlan0 offline\n");
+        FormatPrint("eth0 offline\n");
         retValue = 1;
     }
     else
     {
-        FormatPrint("wlan0 nknown err\n");
+        FormatPrint("eth0 nknown err\n");
         retValue = 2;
     }
 
@@ -53,14 +53,14 @@ int main(int argc, char *argv[])
         return retValue;
     }
 
-    retValue = WLanTest();
+    retValue = LanTest();
     if(retValue == 0)
     {
-        FormatPrint("WLanTest=[OK]\n");
+        FormatPrint("LanTest=[OK]\n");
     }
     else
     {
-        FormatPrint("WLanTest=[NG]\n");
+        FormatPrint("LanTest=[NG]\n");
     }
 
     return retValue;
