@@ -14,6 +14,9 @@ set(SRC_LIST
     FactoryTest-sdcard.cpp
     FactoryTest-lan.cpp
     FactoryTest-ircut.cpp
+    FactoryTest-key.cpp
+    FactoryTest-audioplay.cpp
+    FactoryTest-mic.cpp
     # NewTest.cpp
 )
 foreach(obj_source ${SRC_LIST})
